@@ -109,7 +109,7 @@ namespace <#=namespaceName#>
 				foreach (var item in enums)
 	{
 #>
-			"<#=item[0]#>" => <#=enumName#>.<#=item[0]#>,
+			nameof(<#=enumName#>.<#=item[0]#>) => <#=enumName#>.<#=item[0]#>,
 <#
 	}
 #>

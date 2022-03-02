@@ -46,9 +46,9 @@ namespace EnumExtended
 		public static Enum2 ValueOf(string value)
 		=> value switch
 			{
-			"A" => Enum2.A,
-			"B" => Enum2.B,
-			"C" => Enum2.C,
+			nameof(Enum2.A) => Enum2.A,
+			nameof(Enum2.B) => Enum2.B,
+			nameof(Enum2.C) => Enum2.C,
 			_ => 0,
 		};
 	}

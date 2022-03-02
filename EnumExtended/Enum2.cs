@@ -10,7 +10,7 @@ namespace EnumExtended
 		B = 2,
 		C = 3,
 	}
-	public static class Enum2Extension
+	public static partial class Enum2Ext
 	{
 		public static readonly Enum2Detail Enum2_A = new Enum2Detail("A", 1, "A_1");
 		public static readonly Enum2Detail Enum2_B = new Enum2Detail("B", 2, "B_2");
@@ -33,20 +33,37 @@ namespace EnumExtended
 			_ => null,
 		};
 
-		public class Enum2Detail
-		{
 
-			public Enum2Detail(String Name, Int32 Value, String Key)
+		public static Enum2 KeyOf(string key)
+		=> key switch
 			{
-				this.Name = Name;
-				this.Value = Value;
-				this.Key = Key;
-			}
+			"A_1" => Enum2.A,
+			"B_2" => Enum2.B,
+			"C_C" => Enum2.C,
+			_ => 0,
+		};
 
-			public String Name { get; private set; }
-			public Int32 Value { get; private set; }
-			public String Key { get; private set; }
+		public static Enum2 ValueOf(string value)
+		=> value switch
+			{
+			"A" => Enum2.A,
+			"B" => Enum2.B,
+			"C" => Enum2.C,
+			_ => 0,
+		};
+	}
+
+	public class Enum2Detail
+	{
+		public Enum2Detail(String Name, Int32 Value, String Key)
+		{
+			this.Name = Name;
+			this.Value = Value;
+			this.Key = Key;
 		}
 
+		public String Name { get; private set; }
+		public Int32 Value { get; private set; }
+		public String Key { get; private set; }
 	}
 }

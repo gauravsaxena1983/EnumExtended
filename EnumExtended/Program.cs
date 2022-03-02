@@ -12,13 +12,13 @@ namespace EnumExtended
         static void Main(string[] args)
         {
 
-            var num1 = Number1Util.GetNumber1("");
+            var num1 = Enum2Ext.KeyOf("A_1");
             switch (num1)
             {
-                case Number1.One:
+                case Enum2.A:
                     Console.WriteLine("One");
                     break;
-                case Number1.Two:
+                case Enum2.B:
                     Console.WriteLine("Two");
                     break;
                 default:

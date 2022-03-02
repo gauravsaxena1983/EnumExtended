@@ -39,7 +39,7 @@ namespace <#=namespaceName#>
 	}
 #>
 	}
-	public static class <#=enumName#>Extension
+	public static partial class <#=enumName#>Ext
 	{
 <#
 	foreach(var item in enums)
@@ -87,35 +87,62 @@ namespace <#=namespaceName#>
 			_ => null,
 		};
 
-		public class <#=className#>
-		{
 
-			public <#=className#>(<#
+		public static <#=enumName#> KeyOf(string key)
+		=> key switch
+			{
+<#
+				foreach (var item in enums)
+	{
+#>
+			"<#=item[2]#>" => <#=enumName#>.<#=item[0]#>,
+<#
+	}
+#>
+			_ => 0,
+		};
+
+		public static <#=enumName#> ValueOf(string value)
+		=> value switch
+			{
+<#
+				foreach (var item in enums)
+	{
+#>
+			"<#=item[0]#>" => <#=enumName#>.<#=item[0]#>,
+<#
+	}
+#>
+			_ => 0,
+		};
+	}
+
+	public class <#=className#>
+	{
+		public <#=className#>(<#
 	for(int i1 =0; i1 < fields.Length; i1++)
 	{
 #><#=enums[0][i1].GetType().Name #> <#=fields[i1]#><#= i1 < fields.Length -1? ", " : ""#><#	
 	}
 		#>)
-			{
+		{
 <#
 	for(int i2 =0; i2 < fields.Length; i2++)
 	{
 #>
-				this.<#=fields[i2]#> = <#=fields[i2]#>;
+			this.<#=fields[i2]#> = <#=fields[i2]#>;
 <#	
 	}
 #>
-			}
+		}
 
 <#
 	for(int i3 =0; i3 < fields.Length; i3++)
 	{
 #>
-			public <#=enums[0][i3].GetType().Name#> <#=fields[i3] #> { get; private set; }
+		public <#=enums[0][i3].GetType().Name#> <#=fields[i3] #> { get; private set; }
 <#
 	}
 #>
-		}
-
 	}
 }

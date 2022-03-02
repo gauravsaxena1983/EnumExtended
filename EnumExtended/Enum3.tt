@@ -1,0 +1,96 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+<#
+	var namespaceName = System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceHint");
+	var enumName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var dicEnum = new Dictionary<string, Dictionary<string, object>>()
+            {
+                { "One" ,  new Dictionary<string, object>
+					{
+						{ "Value",  1 },
+						{ "Count",  "X" },
+
+					}
+				},
+                { "Two" ,  new Dictionary<string, object>
+					{
+						{ "Value",  2 },
+						{ "Count",  "XX" },
+					}
+				}
+            };
+
+#>
+namespace <#=namespaceName#>
+{
+	public enum <#=enumName#>
+	{
+<#
+	foreach (var item in dicEnum.Keys)
+	{
+#>
+		<#=item#><#= dicEnum[item].ContainsKey("Value") ? " = " + dicEnum[item]["Value"] : ""#>,
+<#
+	}
+#>
+	}
+	
+	public static class <#=enumName#>Extension
+	{
+		public static string ToStringLite(this <#=enumName#> number)
+		=> number switch
+		{
+<#
+	foreach (var item in dicEnum.Keys)
+	{
+#>
+			<#=enumName#>.<#=item#> => nameof(<#=enumName#>.<#=item#>),
+<#
+	}
+#>
+			_ => number.ToString(),
+		};
+
+		public static <#=enumName#>Detail Details(this <#=enumName#> number)
+		=> number switch
+		{
+<#
+	foreach (var item in dicEnum.Keys)
+	{
+#>
+			<#=enumName#>.<#=item#> => new <#=enumName#>Detail(){
+				Name = "<#=item#>",
+<#
+		var keys = dicEnum[item].Keys;
+		foreach (var prop in keys)
+		{
+#>
+				<#=prop#> = "<#= dicEnum[item][prop]#>",
+<#
+		}
+#>
+
+			},
+<#
+			
+	}
+#>
+			_ => null,
+		};
+		
+	}
+
+	public class <#=enumName#>Detail
+	{
+		public string Name {get; set;}
+		public string Value {get; set;}
+		public string Count {get; set;}
+	}
+
+}

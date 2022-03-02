@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Alphabet1 - Copy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Enum2.cs">
+      <DependentUpon>Enum2.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </None>
+    <None Include="Enum1.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Enum1.tt</DependentUpon>
+    </None>
+    <None Include="Enum3.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Enum3.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Enum2.tt">
+      <LastGenOutput>Enum2.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="Enum1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Enum1.cs</LastGenOutput>
+    </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Enum3.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Enum3.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Alphabet.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Alphabet.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Alphabet1.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Alphabet1.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Alphabet2.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Alphabet2.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Enum1.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Enum1.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Enum2.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Enum2.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Enum3.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Enum3.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Numbers.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Numbers.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,48 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs" #>
+using System;
+<#
+	
+	var enumName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var namespaceName = System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceHint");
+	var values = new (string Name, int Value)[]{
+		("A", 1),
+		("B", 2),
+	};
+#>
+namespace <#=namespaceName#>
+{
+	public enum <#=enumName#>
+	{
+<#
+	foreach (var item in values)
+	{
+#>
+		<#=item.Name#> = <#=item.Value#>,
+<#
+	}
+#>
+	}
+	public static class <#=enumName#>Extension
+	{
+		public static string ToStringLite(this <#=enumName#> e)
+		=> e switch
+		{
+<#
+	foreach (var item in values)
+	{
+#>
+			<#=enumName#>.<#=item.Name#> => nameof(<#=enumName#>.<#=item.Name#>),
+<#
+	}
+#>
+			_ => e.ToString(),
+		};
+
+	}
+}

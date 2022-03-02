@@ -1,0 +1,121 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".cs" #>
+using System;
+
+
+<#
+	var fields = new string[]{ "Name", "Value", "Key" };
+
+	var enums = new object[][] { 
+                new Object[] { "A", 1, "A_1" },
+				new Object[] { "B", 2, "B_2" },
+				new Object[] { "C", 3, "C_C" },
+            };
+
+#>
+<#
+	
+	var enumName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var namespaceName = System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceHint");
+	var className = enumName + "Detail";
+
+#>
+
+namespace <#=namespaceName#>
+{
+	public enum <#=enumName#>
+	{
+<#
+	foreach (var item in enums)
+	{
+#>
+		<#=item[0]#> = <#=item[1]#>,
+<#
+	}
+#>
+	}
+	public static class <#=enumName#>Extension
+	{
+<#
+	foreach(var item in enums)
+	{
+#>
+		public static readonly <#=className#> <#=enumName#>_<#=item[0]#> = new <#=className#>(<#
+		for(int i =0; i < fields.Length; i++)
+	
+		{
+			var isString = item[i].GetType().Name == "String";
+#><#= isString ? "\"" : "" #><#=item[i]#><#= isString ? "\"" : "" #><#= i < fields.Length -1? ", " : ""#><#
+		#>
+<#
+		}
+#>);
+<#
+
+	}
+#>
+		public static string ToStringLite(this <#=enumName#> e)
+		=> e switch
+		{
+<#
+	foreach (var item in enums)
+	{
+#>
+			<#=enumName#>.<#=item[0]#> => nameof(<#=enumName#>.<#=item[0]#>),
+<#
+	}
+#>
+			_ => e.ToString(),
+		};
+
+		public static <#=className#> Details(this <#=enumName#> number)
+		=> number switch
+		{
+<#
+	foreach (var item in enums)
+	{
+#>
+			<#=enumName#>.<#=item[0]#> => <#=enumName#>_<#=item[0]#>,
+<#
+	}
+#>
+			_ => null,
+		};
+
+		public class <#=className#>
+		{
+
+			public <#=className#>(<#
+	for(int i1 =0; i1 < fields.Length; i1++)
+	{
+#><#=enums[0][i1].GetType().Name #> <#=fields[i1]#><#= i1 < fields.Length -1? ", " : ""#><#	
+	}
+		#>)
+			{
+<#
+	for(int i2 =0; i2 < fields.Length; i2++)
+	{
+#>
+				this.<#=fields[i2]#> = <#=fields[i2]#>;
+<#	
+	}
+#>
+			}
+
+<#
+	for(int i3 =0; i3 < fields.Length; i3++)
+	{
+#>
+			public <#=enums[0][i3].GetType().Name#> <#=fields[i3] #> { get; private set; }
+<#
+	}
+#>
+		}
+
+	}
+}

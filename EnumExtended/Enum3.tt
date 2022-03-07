@@ -2,95 +2,147 @@
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
-<#@ import namespace="System.IO" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
 <#@ output extension=".cs" #>
+using System;
+
 
 <#
-	var namespaceName = System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceHint");
-	var enumName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
-	var dicEnum = new Dictionary<string, Dictionary<string, object>>()
-            {
-                { "One" ,  new Dictionary<string, object>
-					{
-						{ "Value",  1 },
-						{ "Count",  "X" },
+	var fields = new string[]{ "Name", "Value", "Key" };
 
-					}
-				},
-                { "Two" ,  new Dictionary<string, object>
-					{
-						{ "Value",  2 },
-						{ "Count",  "XX" },
-					}
-				}
+	var enums = new object[][] { 
+                new Object[] { "A", 1, "A_1" },
+				new Object[] { "B", 2, "B_2" },
+				new Object[] { "C", 3, "C_C" },
             };
 
 #>
+<#
+	
+	var enumName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
+	var namespaceName = System.Runtime.Remoting.Messaging.CallContext.LogicalGetData("NamespaceHint");
+	var className = enumName + "Detail";
+	var extClassName = enumName + "Ext";
+#>
+
 namespace <#=namespaceName#>
 {
 	public enum <#=enumName#>
 	{
 <#
-	foreach (var item in dicEnum.Keys)
+	foreach (var item in enums)
 	{
 #>
-		<#=item#><#= dicEnum[item].ContainsKey("Value") ? " = " + dicEnum[item]["Value"] : ""#>,
+		<#=item[0]#> = <#=item[1]#>,
 <#
 	}
 #>
 	}
+	public static partial class <#=extClassName#>
+	{
+<#
+	foreach(var item in enums)
+	{
+#>
+		public static readonly <#=className#> <#=enumName#>_<#=item[0]#> = new <#=className#>(<#
+		for(int i =0; i < fields.Length; i++)
 	
-	public static class <#=enumName#>Extension
-	{
-		public static string ToStringLite(this <#=enumName#> number)
-		=> number switch
 		{
-<#
-	foreach (var item in dicEnum.Keys)
-	{
-#>
-			<#=enumName#>.<#=item#> => nameof(<#=enumName#>.<#=item#>),
-<#
-	}
-#>
-			_ => number.ToString(),
-		};
-
-		public static <#=enumName#>Detail Details(this <#=enumName#> number)
-		=> number switch
-		{
-<#
-	foreach (var item in dicEnum.Keys)
-	{
-#>
-			<#=enumName#>.<#=item#> => new <#=enumName#>Detail(){
-				Name = "<#=item#>",
-<#
-		var keys = dicEnum[item].Keys;
-		foreach (var prop in keys)
-		{
-#>
-				<#=prop#> = "<#= dicEnum[item][prop]#>",
+			var isString = item[i].GetType().Name == "String";
+#><#= isString ? "\"" : "" #><#=item[i]#><#= isString ? "\"" : "" #><#= i < fields.Length -1? ", " : ""#><#
+		#>
 <#
 		}
-#>
-
-			},
+#>);
 <#
-			
+
+	}
+#>
+		public static string ToStringLite(this <#=enumName#> e)
+		=> e switch
+		{
+<#
+	foreach (var item in enums)
+	{
+#>
+			<#=enumName#>.<#=item[0]#> => nameof(<#=enumName#>.<#=item[0]#>),
+<#
+	}
+#>
+			_ => e.ToString(),
+		};
+
+		public static <#=className#> Details(this <#=enumName#> number)
+		=> number switch
+		{
+<#
+	foreach (var item in enums)
+	{
+#>
+			<#=enumName#>.<#=item[0]#> => <#=enumName#>_<#=item[0]#>,
+<#
 	}
 #>
 			_ => null,
 		};
-		
-	}
 
-	public class <#=enumName#>Detail
+
+		public static <#=enumName#> KeyOf(string key)
+		=> key switch
+			{
+<#
+				foreach (var item in enums)
 	{
-		public string Name {get; set;}
-		public string Value {get; set;}
-		public string Count {get; set;}
+#>
+			"<#=item[2]#>" => <#=enumName#>.<#=item[0]#>,
+<#
+	}
+#>
+			_ => 0,
+		};
+
+		public static <#=enumName#> ValueOf(string value)
+		=> value switch
+			{
+<#
+				foreach (var item in enums)
+	{
+#>
+			nameof(<#=enumName#>.<#=item[0]#>) => <#=enumName#>.<#=item[0]#>,
+<#
+	}
+#>
+			_ => 0,
+		};
 	}
 
+	public class <#=className#>
+	{
+		public <#=className#>(<#
+	for(int i1 =0; i1 < fields.Length; i1++)
+	{
+#><#=enums[0][i1].GetType().Name #> <#=fields[i1]#><#= i1 < fields.Length -1? ", " : ""#><#	
+	}
+		#>)
+		{
+<#
+	for(int i2 =0; i2 < fields.Length; i2++)
+	{
+#>
+			this.<#=fields[i2]#> = <#=fields[i2]#>;
+<#	
+	}
+#>
+		}
+
+<#
+	for(int i3 =0; i3 < fields.Length; i3++)
+	{
+#>
+		public <#=enums[0][i3].GetType().Name#> <#=fields[i3] #> { get; private set; }
+<#
+	}
+#>
+	}
 }

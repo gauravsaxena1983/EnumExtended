@@ -12,14 +12,14 @@ namespace EnumExtended
         static void Main(string[] args)
         {
 
-            var num1 = Enum2Ext.KeyOf("A_1");
+            var num1 = Enum3Ext.KeyOf("A_1");
             switch (num1)
             {
-                case Enum2.A:
-                    Console.WriteLine("One");
+                case Enum3.A:
+                    Console.WriteLine("A");
                     break;
-                case Enum2.B:
-                    Console.WriteLine("Two");
+                case Enum3.B:
+                    Console.WriteLine("B");
                     break;
                 default:
                     Console.WriteLine("None");
@@ -37,7 +37,7 @@ namespace EnumExtended
             int i = 0;
             while (i < 100000000)
             {
-                var str = Enum2.A.ToStringLite();
+                var str = Enum3.A.ToStringLite();
                 i++;
             }
             stopwatch.Stop();

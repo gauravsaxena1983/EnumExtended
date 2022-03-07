@@ -1,69 +1,47 @@
-﻿using System;
-
-
-
+﻿
 namespace EnumExtended
 {
 	public enum Enum2
 	{
-		A = 1,
-		B = 2,
-		C = 3,
+		One = 1,
+		Two = 2,
 	}
-	public static partial class Enum2Ext
+	
+	public static class Enum2Extension
 	{
-		public static readonly Enum2Detail Enum2_A = new Enum2Detail("A", 1, "A_1");
-		public static readonly Enum2Detail Enum2_B = new Enum2Detail("B", 2, "B_2");
-		public static readonly Enum2Detail Enum2_C = new Enum2Detail("C", 3, "C_C");
-		public static string ToStringLite(this Enum2 e)
-		=> e switch
+		public static string ToStringLite(this Enum2 number)
+		=> number switch
 		{
-			Enum2.A => nameof(Enum2.A),
-			Enum2.B => nameof(Enum2.B),
-			Enum2.C => nameof(Enum2.C),
-			_ => e.ToString(),
+			Enum2.One => nameof(Enum2.One),
+			Enum2.Two => nameof(Enum2.Two),
+			_ => number.ToString(),
 		};
 
 		public static Enum2Detail Details(this Enum2 number)
 		=> number switch
 		{
-			Enum2.A => Enum2_A,
-			Enum2.B => Enum2_B,
-			Enum2.C => Enum2_C,
+			Enum2.One => new Enum2Detail(){
+				Name = "One",
+				Value = "1",
+				Count = "#",
+
+			},
+			Enum2.Two => new Enum2Detail(){
+				Name = "Two",
+				Value = "2",
+				Count = "##",
+
+			},
 			_ => null,
 		};
-
-
-		public static Enum2 KeyOf(string key)
-		=> key switch
-			{
-			"A_1" => Enum2.A,
-			"B_2" => Enum2.B,
-			"C_C" => Enum2.C,
-			_ => 0,
-		};
-
-		public static Enum2 ValueOf(string value)
-		=> value switch
-			{
-			nameof(Enum2.A) => Enum2.A,
-			nameof(Enum2.B) => Enum2.B,
-			nameof(Enum2.C) => Enum2.C,
-			_ => 0,
-		};
+		
 	}
 
 	public class Enum2Detail
 	{
-		public Enum2Detail(String Name, Int32 Value, String Key)
-		{
-			this.Name = Name;
-			this.Value = Value;
-			this.Key = Key;
-		}
-
-		public String Name { get; private set; }
-		public Int32 Value { get; private set; }
-		public String Key { get; private set; }
+		public string Name {get; set;}
+		public string Value {get; set;}
+		public string Count {get; set;}
 	}
+
 }

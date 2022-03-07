@@ -10,8 +10,8 @@ namespace EnumExtended
     public static class Number1Ext
     {
 
-        public static readonly Number1Detail Number1_One = new Number1Detail("One", 1, "X");
-        public static readonly Number1Detail Number1_Two = new Number1Detail("Two", 2, "XX");
+        public static readonly Number1Detail Number1_One = new Number1Detail("One", 1, "#");
+        public static readonly Number1Detail Number1_Two = new Number1Detail("Two", 2, "##");
 
         public static string ToStringLite(this Number1 number)
         => number switch
@@ -32,8 +32,8 @@ namespace EnumExtended
         public static Number1 KeyOf(string value)
         => value switch
         {
-            "X" => Number1.One,
-            "XX" => Number1.Two,
+            "#" => Number1.One,
+            "##" => Number1.Two,
             _ => 0,
         };
 
